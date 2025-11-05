@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Varanasi Fitness Vlog — Coming Soon</title>
+  <meta name="description" content="Varanasi Fitness Vlog is coming soon — workouts, nutrition, local Varanasi fitness scenes. Subscribe for updates." />
+  <style>
+    /* ---------- Base / Utility ---------- */
+    :root{
+      --bg1:#071422;
+      --bg2:#0f2a3a;
+      --accent:#ff7a59;
+      --muted:#b6c8cf;
+      --card:#081826;
+      --glass: rgba(255,255,255,0.04);
+      --max-w:1100px;
+      --radius:16px;
+      --gap:18px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 700px at 10% 10%, rgba(255,122,89,0.06), transparent 10%),
+                  radial-gradient(800px 500px at 90% 90%, rgba(0,150,255,0.03), transparent 12%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#e6f2f6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+      gap:var(--gap);
+    }
+
+    /* ---------- Container ---------- */
+    .wrap{
+      width:100%;
+      max-width:var(--max-w);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:28px;
+      box-shadow: 0 10px 30px rgba(2,6,10,0.6);
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.04);
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:24px;
+      align-items:center;
+    }
+
+    /* ---------- Left: Message ---------- */
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:6px;
+    }
+    .logo{
+      width:64px;
+      height:64px;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),#ffbe6b);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:20px;
+      color:#071422;
+      box-shadow: 0 6px 18px rgba(255,122,89,0.12), inset 0 -6px 18px rgba(0,0,0,0.12);
+      flex-shrink:0;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(20px, 2.8vw, 32px);
+      letter-spacing: -0.02em;
+    }
+    p.lead{
+      margin:10px 0 18px;
+      color:var(--muted);
+      line-height:1.5;
+      max-width:70ch;
+    }
+
+    /* ---------- Countdown / CTA ---------- */
+    .countdown{
+      display:flex;
+      gap:12px;
+      margin-top:6px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .time-box{
+      background:var(--card);
+      padding:12px 14px;
+      border-radius:10px;
+      min-width:76px;
+      text-align:center;
+      box-shadow: 0 6px 18px rgba(2,6,10,0.5);
+    }
+    .time-box strong{display:block;font-size:18px}
+    .time-box small{display:block;color:var(--muted);font-size:12px}
+
+    /* ---------- Email form ---------- */
+    form.sign-up{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      width:100%;
+    }
+    input[type="email"]{
+      flex:1;
+      min-width:0;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.06);
+      background:rgba(255,255,255,0.02);
+      color:inherit;
+      outline:none;
+      font-size:14px;
+    }
+    input[type="email"]::placeholder{color:rgba(230,242,246,0.5)}
+    button.primary{
+      padding:12px 16px;
+      border-radius:10px;
+      border:0;
+      background:linear-gradient(90deg,var(--accent),#ffbe6b);
+      color:#071422;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow: 0 6px 18px rgba(255,122,89,0.12);
+    }
+    button.primary:focus-visible, input[type="email"]:focus-visible{
+      box-shadow:0 0 0 4px rgba(255,122,89,0.12);
+    }
+
+    /* ---------- Right: Panel ---------- */
+    .panel{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:18px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.03);
+      min-width:280px;
+    }
+    .hero-image{
+      height:200px;
+      border-radius:8px;
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(7,20,34,0.12), rgba(7,20,34,0.45)),
+        url('https://images.unsplash.com/photo-1554284126-aa88f22d8d20?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder') center/cover no-repeat;
+      display:flex;
+      align-items:flex-end;
+      padding:12px;
+      color:#fff;
+    }
+    .badge{
+      background:rgba(0,0,0,0.4);
+      padding:8px 10px;
+      border-radius:8px;
+      font-weight:600;
+      font-size:13px;
+      backdrop-filter: blur(6px);
+    }
+    .socials{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .socials a{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:10px;
+      text-decoration:none;
+      background:var(--glass);
+      color:inherit;
+      border:1px solid rgba(255,255,255,0.03);
+      font-weight:600;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .socials a:focus-visible{outline:3px solid rgba(255,122,89,0.12)}
+    .socials a:hover{transform:translateY(-4px); box-shadow: 0 12px 30px rgba(2,6,10,0.5)}
+
+    /* ---------- Animated background elements ---------- */
+    .orb, .lines {
+      position:absolute;
+      pointer-events:none;
+      filter: blur(40px) saturate(120%);
+      mix-blend-mode:screen;
+      opacity:0.7;
+    }
+    .orb{
+      width:380px;
+      height:380px;
+      border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,122,89,0.45), rgba(255,122,89,0.12) 25%, transparent 40%),
+                  radial-gradient(circle at 70% 70%, rgba(0,150,255,0.12), transparent 35%);
+      right:-140px;
+      top:-140px;
+      transform:translateZ(0);
+      animation: float 12s ease-in-out infinite;
+    }
+    .lines{
+      width:120%;
+      height:140%;
+      left:-10%;
+      top:-28%;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.02) 0 10%, transparent 10% 20%),
+        linear-gradient(180deg, rgba(255,255,255,0.01) 0 15%, transparent 15% 30%);
+      transform:rotate(12deg);
+      animation: slow-rotate 36s linear infinite;
+    }
+
+    @keyframes float{
+      0%{transform:translateY(0) translateX(0) scale(1)}
+      50%{transform:translateY(-18px) translateX(8px) scale(1.03)}
+      100%{transform:translateY(0) translateX(0) scale(1)}
+    }
+    @keyframes slow-rotate{
+      from{transform:rotate(0deg)}
+      to{transform:rotate(360deg)}
+    }
+
+    /* ---------- Accessibility: reduce motion ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      .orb, .lines { animation: none; }
+      .socials a:hover { transform:none; box-shadow:none; }
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:980px){
+      .wrap{grid-template-columns: 1fr; padding:22px}
+      .panel{order:-1}
+      .hero-image{height:160px}
+    }
+
+    /* ---------- Footer small ---------- */
+    .meta{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    /* Focus outline for keyboard users (visible only when focused) */
+    :focus { outline: none; }
+    :focus-visible { outline: 3px solid rgba(255,122,89,0.12); border-radius:8px; }
+
+  </style>
+</head>
+<body>
+  <div class="orb" aria-hidden="true"></div>
+  <div class="lines" aria-hidden="true"></div>
+
+  <main class="wrap" role="main" aria-labelledby="main-heading">
+    <section>
+      <div class="brand" aria-hidden="false">
+        <div class="logo" aria-hidden="true">VF</div>
+        <div>
+          <div style="font-size:12px;color:var(--muted);">YouTube channel</div>
+          <div style="font-weight:700">Varanasi Fitness Vlog</div>
+        </div>
+      </div>
+
+      <h1 id="main-heading">We're almost ready — Varanasi Fitness Vlog is launching soon</h1>
+
+      <p class="lead">
+        Local workouts, nutrition tips, and fitness life from Varanasi. We're putting the final touches
+        on the channel and website. Subscribe below to get notified the moment we go live.
+      </p>
+
+      <div class="countdown" aria-live="polite" aria-atomic="true" id="countdown" title="Countdown to launch">
+        <div class="time-box" aria-hidden="false">
+          <strong id="days">00</strong>
+          <small>Days</small>
+        </div>
+        <div class="time-box">
+          <strong id="hours">00</strong>
+          <small>Hours</small>
+        </div>
+        <div class="time-box">
+          <strong id="minutes">00</strong>
+          <small>Minutes</small>
+        </div>
+        <div class="time-box">
+          <strong id="seconds">00</strong>
+          <small>Seconds</small>
+        </div>
+      </div>
+
+      <form class="sign-up" id="signup" method="post" action="#" aria-label="Subscribe for updates">
+        <!-- For real use, replace action="#" with your endpoint (e.g., Formspree, Mailchimp, your server) -->
+        <input type="email" id="email" name="email" placeholder="Your email address" required aria-required="true" />
+        <button class="primary" type="submit">Notify me</button>
+      </form>
+
+      <div class="meta" aria-hidden="false">
+        <span>Prefer updates by YouTube? <a href="https://www.youtube.com/@varanasifitnessvlog" target="_blank" rel="noopener noreferrer" style="color:var(--accent); text-decoration:none; font-weight:600;">Subscribe on YouTube</a></span>
+        <span aria-hidden="true">•</span>
+        <span style="color:var(--muted)">Built with care • Varanasi, India</span>
+      </div>
+    </section>
+
+    <aside class="panel" aria-labelledby="panel-heading">
+      <div class="hero-image" role="img" aria-label="Fitness scene placeholder image">
+        <div class="badge">Fitness • Local • Real</div>
+      </div>
+
+      <h3 id="panel-heading" style="margin:0">Quick links</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+        <a class="social-cta" href="https://www.youtube.com/@varanasifitnessvlog" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M23.5 6.2s-.24-1.7-.98-2.45c-.94-.99-2-1-2.49-1.06C16.75 2.3 12 2.3 12 2.3h-.01s-4.75 0-8.01.39c-.49.06-1.55.08-2.49 1.07C.74 4.49.5 6.2.5 6.2S.25 8 0 9.8v2.4c.25 1.8.5 3.6.5 3.6s.24 1.7 1 2.45c.94.99 2.19.96 2.74 1.06C7.2 20.3 12 20.3 12 20.3s4.75 0 8.01-.39c.49-.06 1.55-.08 2.49-1.07.74-.75.98-2.45.98-2.45s.24-1.8.5-3.6v-2.4c-.26-1.8-.5-3.6-.5-3.6z" fill="currentColor"/>
+            <path d="M9.75 15.02V8.98L15.5 12l-5.75 3.02z" fill="currentColor"/>
+          </svg>
+          <span style="font-weight:700">YouTube — @varanasifitnessvlog</span>
+        </a>
+
+        <div class="socials" aria-hidden="false">
+          <a href="https://www.youtube.com/@varanasifitnessvlog" target="_blank" rel="noopener noreferrer" aria-label="Open YouTube channel">
+            <!-- YouTube SVG + label -->
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M23.5 6.2s-.24-1.7-.98-2.45c-.94-.99-2-1-2.49-1.06C16.75 2.3 12 2.3 12 2.3h-.01s-4.75 0-8.0
+
+                
