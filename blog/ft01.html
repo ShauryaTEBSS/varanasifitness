@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Locked Fitness Post</title>
+
+    <script src="https://accounts.google.com/gsi/client"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* General page styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* This wrapper holds both the content and the verification gate */
+        #content-locker-wrapper {
+            position: relative;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden; /* Important for positioning the gate */
+        }
+
+        /* The blurred content area */
+        #premium-content {
+            padding: 30px;
+            transition: filter 0.3s ease-in-out;
+        }
+
+        /* The class that blurs the content */
+        .is-blurred {
+            filter: blur(10px);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* The verification gate that sits on top */
+        #verification-gate {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+            border-radius: 8px;
+        }
+
+        /* Styles for the Google Sign-In button (from your code) */
+        .rameezscript-google-signin {
+            background: white !important;
+            color: #757575 !important;
+            border: 1px solid #dadce0 !important;
+            padding: 12px 20px !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            margin: 10px 5px !important;
+            font-size: 16px !important;
+            font-family: Arial, sans-serif !important;
+            font-weight: normal !important;
+            outline: none !important;
+            transition: all 0.2s ease;
+        }
+        .rameezscript-google-signin:hover {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        }
+        .rameezscript-google-signin img {
+            width: 20px !important;
+            height: 20px !important;
+            margin-right: 10px !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="content-locker-wrapper">
+
+        <div id="verification-gate">
+            <h3>🔒 Unlock This Premium Post</h3>
+            <p>To read this exclusive fitness guide, please verify you are subscribed to our YouTube channel.</p>
+            
+            <button id="verify-btn" class="rameezscript-google-signin">
+                <img alt="Google logo" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+                Verify with YouTube
+            </button>
+        </div>
+
+        <div id="premium-content">
+            <h1>My Ultimate Fitness Guide (FT01)</h1>
+            <p>Welcome to the premium content. If you can read this, the verification was successful!</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <img src="https://via.placeholder.com/600x300.png?text=Premium+Fitness+Image" alt="Placeholder" style="max-width:100%; height:auto; border-radius: 8px;">
+            <h2>Section 2: The Workout</h2>
+            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+            <ul>
+                <li>Push-ups: 3 sets of 12</li>
+                <li>Squats: 3 sets of 15</li>
+                <li>Plank: 3 sets of 60 seconds</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // --- START: Configuration ---
+        // TODO 1: Get this from your Google Cloud Console. See instructions.
+        const YOUR_CLIENT_ID = 'PASTE_YOUR_GOOGLE_CLIENT_ID_HERE';
+
+        // TODO 2: Get this from your YouTube channel's advanced settings.
+        const YOUR_YOUTUBE_CHANNEL_ID = 'UCjuHRO9x-zViTDvBvY9_nug';
+
+        // TODO 3: A link to your channel for the "Please Subscribe" pop-up.
+        const YOUR_CHANNEL_URL = 'https://www.youtube.com/@varanasifitnessvlog?sub_confirmation=1';
+        // --- END: Configuration ---
+
+
+        let tokenClient;
+
+        /**
+         * 1. Runs when the page loads.
+         */
+        window.onload = function() {
+            // First, check if the user is already verified from a previous visit.
+            if (localStorage.getItem('youtubeSubscribed') === 'true') {
+                // If yes, unlock the content immediately.
+                unlockContent();
+            } else {
+                // If not, initialize the Google Sign-In and add the button click listener.
+                initializeGis();
+                document.getElementById('verify-btn').onclick = handleAuthClick;
+            }
+        };
+
+        /**
+         * 2. Initializes the Google Identity Services client.
+         */
+        function initializeGis() {
+            try {
+                tokenClient = google.accounts.oauth2.initTokenClient({
+                    client_id: YOUR_CLIENT_ID,
+                    scope: 'https://www.googleapis.com/auth/youtube.readonly',
+                    callback: (response) => {
+                        // This callback runs AFTER the user signs in and grants permission.
+                        if (response.access_token) {
+                            // Immediately check the subscription.
+                            checkSubscription(response.access_token);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Authentication Failed',
+                                text: 'Could not get permission. Please try again.',
+                            });
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error initializing GIS:', error);
+                Swal.fire('Error', 'Error initializing authentication. Please refresh the page.', 'error');
+            }
+        }
+
+        /**
+         * 3. Called when the "Verify" button is clicked.
+         */
+        function handleAuthClick() {
+            if (tokenClient) {
+                // Shows the Google pop-up to ask for permission.
+                tokenClient.requestAccessToken();
+            } else {
+                Swal.fire('Error', 'Authentication is not ready. Please refresh.', 'error');
+            }
+        }
+
+        /**
+         * 4. Uses the access token to call the YouTube API.
+         */
+        async function checkSubscription(accessToken) {
+            Swal.fire({
+                title: 'Verifying subscription...',
+                html: 'Please wait...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                // This is the official Google API call to check subscriptions.
+                const response = await fetch(
+                    'https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&maxResults=50', 
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Accept': 'application/json'
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error.message || 'Failed to fetch subscriptions');
+                }
+
+                const data = await response.json();
+                
+                // Loop through the list of subscriptions to find a match.
+                const isSubscribed = (data.items || []).some(
+                    item => item.snippet.resourceId.channelId === YOUR_YOUTUBE_CHANNEL_ID
+                );
+
+                Swal.close();
+
+                if (isSubscribed) {
+                    // SUCCESS!
+                    unlockContent();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Access Unlocked!',
+                        text: 'Thank you for subscribing!',
+                    });
+                } else {
+                    // FAILURE!
+                    showSubscribePrompt();
+                }
+
+            } catch (error) {
+                console.error('Error checking subscription:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `Failed to verify subscription. Please try again.`,
+                });
+            }
+        }
+
+        /**
+         * 5. Unlocks the content.
+         */
+        function unlockContent() {
+            const content = document.getElementById('premium-content');
+            const gate = document.getElementById('verification-gate');
+
+            content.classList.remove('is-blurred');
+            gate.style.display = 'none';
+
+            // Remember this user's choice so they don't have to verify again.
+            localStorage.setItem('youtubeSubscribed', 'true');
+        }
+
+        /**
+         * 6. Shows the "Please Subscribe" pop-up.
+         */
+        function showSubscribePrompt() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Subscription Not Found',
+                html: `Please subscribe to our YouTube channel to access this content.<br><br>` +
+                      `<a href="${YOUR_CHANNEL_URL}" target="_blank" style="color: #1a73e8; text-decoration: underline; font-weight: 500;">Subscribe Now</a>`,
+                confirmButtonText: 'I have subscribed, check again',
+                confirmButtonColor: '#0f9d58',
+                showCancelButton: true,
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Re-run the authentication check.
+                    handleAuthClick();
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
