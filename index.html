@@ -335,6 +335,93 @@
           <a href="https://www.youtube.com/@varanasifitnessvlog" target="_blank" rel="noopener noreferrer" aria-label="Open YouTube channel">
             <!-- YouTube SVG + label -->
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M23.5 6.2s-.24-1.7-.98-2.45c-.94-.99-2-1-2.49-1.06C16.75 2.3 12 2.3 12 2.3h-.01s-4.75 0-8.0
+              <path d="M23.5 6.2s-.24-1.7-.98-2.45c-.94-.99-2-1-2.49-1.06C16.75 2.3 12 2.3 12 2.3h-.01s-4.75 0-8.01.39c-.49.06-1.55.08-2.49 1.07C.74 4.49.5 6.2.5 6.2S.25 8 0 9.8v2.4c.25 1.8.5 3.6.5 3.6s.24 1.7 1 2.45c.94.99 2.19.96 2.74 1.06C7.2 20.3 12 20.3 12 20.3s4.75 0 8.01-.39c.49-.06 1.55-.08 2.49-1.07.74-.75.98-2.45.98-2.45s.24-1.8.5-3.6v-2.4c-.26-1.8-.5-3.6-.5-3.6z" fill="currentColor"></path>
+            </svg>
+            <span style="font-weight:600">YouTube</span>
+          </a>
 
-                
+          <!-- Placeholder social links (customize) -->
+          <a href="#" aria-label="Instagram (replace link)" tabindex="0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span style="font-weight:600">Instagram</span>
+          </a>
+        </div>
+
+        <div style="margin-top:12px;color:var(--muted);font-size:13px">Contact: <a href="mailto:hello@varanasifitnessvlog.com" style="color:var(--accent); text-decoration:none;">hello@varanasifitnessvlog.com</a></div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    /* ---------- Countdown: set launch date here ---------- */
+    (function(){
+      // Customize the target launch date/time (YYYY, M-1, D, H, M, S)
+      // Example: 2025-12-01 10:00:00 IST => new Date(2025, 11, 1, 10, 0, 0)
+      const launchDate = new Date(2025, 11, 1, 10, 0, 0); // DECEMBER 1, 2025 10:00 local time
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minsEl = document.getElementById('minutes');
+      const secsEl = document.getElementById('seconds');
+
+      function updateCountdown(){
+        const now = new Date();
+        let diff = Math.max(0, launchDate - now);
+
+        const days = Math.floor(diff / (1000*60*60*24));
+        diff -= days * (1000*60*60*24);
+        const hours = Math.floor(diff / (1000*60*60));
+        diff -= hours * (1000*60*60);
+        const minutes = Math.floor(diff / (1000*60));
+        diff -= minutes * (1000*60);
+        const seconds = Math.floor(diff / 1000);
+
+        daysEl.textContent = String(days).padStart(2,'0');
+        hoursEl.textContent = String(hours).padStart(2,'0');
+        minsEl.textContent = String(minutes).padStart(2,'0');
+        secsEl.textContent = String(seconds).padStart(2,'0');
+
+        if (launchDate - now <= 0) {
+          // If launched: change message and stop timer
+          document.getElementById('countdown').innerHTML = '<div style="font-weight:700;color:var(--accent)">We are live! Visit our YouTube channel or refresh to see updates.</div>';
+          clearInterval(timer);
+        }
+      }
+
+      // If user prefers reduced motion, avoid interval stress
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      updateCountdown();
+      const timer = prefersReduced ? null : setInterval(updateCountdown, 1000);
+
+      // Form submission: placeholder behavior
+      const form = document.getElementById('signup');
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        if(!email){
+          alert('Please enter a valid email address.');
+          return;
+        }
+
+        // In production: POST to your server or third-party service
+        // For demo: open mailto as fallback
+        // NOTE: replace this with real integration (Formspree / Mailchimp / API)
+        const subject = encodeURIComponent('Notify me about Varanasi Fitness Vlog');
+        const body = encodeURIComponent('Please notify me when the site/channel goes live. Email: ' + email);
+        // Open mail client as fallback for now
+        window.location.href = 'mailto:hello@varanasifitnessvlog.com?subject=' + subject + '&body=' + body;
+      });
+
+      // Accessibility: enable keyboard focus on anchors that are divs etc.
+      document.querySelectorAll('a[tabindex="0"]').forEach(a => {
+        a.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' ') a.click();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
